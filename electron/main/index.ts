@@ -2,6 +2,7 @@ import { app, BrowserWindow, shell, ipcMain } from "electron";
 import { release } from "node:os";
 import { join } from "node:path";
 import { update } from "./update";
+import "dotenv/config";
 
 // The built directory structure
 //
@@ -105,5 +106,21 @@ app.on("activate", () => {
 
 // New window example arg: new windows url
 ipcMain.on("hello", (_, arg) => {
-  console.log("hello from electron");
+  client.login(process.env.DISCORD_BOT_TOKEN);
+});
+
+import { Client, GatewayIntentBits } from "discord.js";
+import chalk from "chalk";
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+client.on("ready", () => {
+  console.log(chalk.blue(`Logged in as ${client.user?.tag}!`));
+});
+
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === "ping") {
+    await interaction.reply("Pong!");
+  }
 });

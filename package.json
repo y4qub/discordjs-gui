@@ -19,7 +19,12 @@
     "e2e": "playwright test"
   },
   "dependencies": {
-    "electron-updater": "^6.1.1"
+    "chalk": "^4.1.2",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "electron-updater": "^6.1.1",
+    "reactflow": "^11.8.3",
+    "save": "^2.9.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.37.1",
