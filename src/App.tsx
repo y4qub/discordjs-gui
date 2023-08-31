@@ -1,17 +1,17 @@
 import { ipcRenderer } from "electron";
 import "./App.scss";
-import ReactFlow, {
-  Handle,
-  Position,
-  addEdge,
-  useEdgesState,
-  useNodesState,
-} from "reactflow";
+import ReactFlow, { addEdge, useEdgesState, useNodesState } from "reactflow";
 import "reactflow/dist/style.css";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
+import { SendMessageNode } from "./assets/SendMessageNode";
 
 const initialNodes = [
-  { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
+  {
+    id: "1",
+    position: { x: 0, y: 0 },
+    data: { label: "1" },
+    type: "sendMessage",
+  },
   {
     id: "2",
     position: { x: 0, y: 100 },
@@ -19,6 +19,9 @@ const initialNodes = [
   },
 ];
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
+const nodeTypes = {
+  sendMessage: SendMessageNode,
+};
 
 function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -30,21 +33,24 @@ function App() {
 
   return (
     <div className="App">
-      <button
-        onClick={() => {
-          ipcRenderer.send("hello");
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          background: "rgb(240,240,240)",
         }}
       >
-        Start
-      </button>
-      <div style={{ width: "100vw", height: "100vh" }}>
+        <input
+          className="input input-bordered w-full max-w-xs"
+          value={"test"}
+        />
         <ReactFlow
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          fitView
+          nodeTypes={nodeTypes}
         />
       </div>
     </div>
