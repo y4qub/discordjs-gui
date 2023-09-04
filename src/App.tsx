@@ -1,15 +1,26 @@
 import { ipcRenderer } from "electron";
 import "./App.scss";
-import ReactFlow, { addEdge, useEdgesState, useNodesState } from "reactflow";
+import ReactFlow, {
+  MarkerType,
+  addEdge,
+  useEdgesState,
+  useNodesState,
+  Node,
+  Edge,
+  NodeTypes,
+} from "reactflow";
 import "reactflow/dist/style.css";
 import { useCallback } from "react";
-import { SendMessageNode } from "./assets/SendMessageNode";
+import { SendMessageNode } from "./SendMessageNode";
+import { SelectNode } from "./SelectNode";
 
-const initialNodes = [
+import "reactflow/dist/style.css";
+
+const initialNodes: Node[] = [
   {
     id: "1",
     position: { x: 0, y: 0 },
-    data: { label: "1" },
+    data: { label: "4" },
     type: "sendMessage",
   },
   {
@@ -17,22 +28,53 @@ const initialNodes = [
     position: { x: 0, y: 100 },
     data: { label: "2" },
   },
+  {
+    id: "4",
+    type: "custom",
+    position: { x: 100, y: 200 },
+    data: {
+      selects: {
+        "handle-0": "smoothstep",
+      },
+    },
+  },
+  {
+    id: "5",
+    position: { x: 0, y: 100 },
+    data: { label: "5" },
+  },
 ];
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
-const nodeTypes = {
+const initialEdges: Edge[] = [
+  { id: "e1-2", source: "1", target: "2" },
+  {
+    id: "e4-5",
+    source: "4",
+    target: "5",
+    type: "smoothstep",
+    sourceHandle: "handle-0",
+    data: {
+      selectIndex: 0,
+    },
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
+  },
+];
+const nodeTypes: NodeTypes = {
   sendMessage: SendMessageNode,
+  custom: SelectNode,
 };
 
 function App() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(initialEdges);
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
   return (
-    <div className="App">
+    <div className="prose">
       <div
         style={{
           width: "100vw",
@@ -51,7 +93,10 @@ function App() {
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           nodeTypes={nodeTypes}
+          //onInit
+          //fitView
         />
+        s
       </div>
     </div>
   );

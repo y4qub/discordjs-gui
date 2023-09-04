@@ -3,15 +3,15 @@ import { Handle, Position } from "reactflow";
 
 export const SendMessageNode = memo(() => {
   return (
-    <div className="bg-white rounded p-2">
+    <div className="p-2">
       <Handle
         type="target"
         position={Position.Left}
         onConnect={(params) => console.log("Connected")}
       />
       <div className="">
-        <h2 className="text-xs">Send Message</h2>
-        <input className="input input-bordered w-full max-w-xs" />
+        <h2 className="">Send Message</h2>
+        <input className="input input-bordered w-full max-w-xs nodrag" />
       </div>
       <Handle
         type="source"
